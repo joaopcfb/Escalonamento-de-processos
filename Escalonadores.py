@@ -16,31 +16,46 @@ def LerArquivo(arquivo):
 
 
 def fifo(conteudo, steps):
-    tempo = 0
-    if steps:
-#         while len(conteudo[0]) != 0:
-#                if conteudo[i][2] < conteudo[menor_tempo][2]:
-#                     menor_tempo = i
-#             if acumulador != '':
-#                 acumulador = acumulador + '->' + conteudo[menor_tempo][1]
-#             else:
-#                 acumulador = conteudo[menor_tempo][1]
-#             print(acumulador)
-#             input()
-#             del (conteudo[menor_tempo])
-#             menor_tempo = 0
-    else:
-        #usando bubble sort para ordenar o vetor
-        for i in range(len(conteudo[0])):
-            for j in range(len(conteudo[0])-1):
-                if int(conteudo[j][2]) > int(conteudo[j+1][2]):
-                    aux = conteudo[j]
-                    conteudo[j] = conteudo[j+1]
-                    conteudo[j + 1] = aux
-        print(conteudo)
+    tempo_total = 0
+    acumulador = ""
+    tempo_de_entrada = 0
+    # usando bubble sort para ordenar o vetor
+    for i in range(len(conteudo[0])):
+        for j in range(len(conteudo[0]) - 1):
+            if int(conteudo[j][2]) > int(conteudo[j + 1][2]):
+                aux = conteudo[j]
+                conteudo[j] = conteudo[j + 1]
+                conteudo[j + 1] = aux
 
-        while len(conteudo[0] != 0):
-            while tempo <
+    if steps:
+        # enquanto tamanho do vetor for maior que zero, faca
+        while len(conteudo) > 0:
+            if (int(conteudo[0][3]) - (tempo_total - tempo_de_entrada)) == 0:
+                if acumulador != '':
+                    acumulador += "->" + conteudo[0][1]
+                else:
+                    acumulador = conteudo[0][1]
+                # deleta o processo quando ele finaliza
+                del (conteudo[0])
+                tempo_de_entrada = tempo_total
+            tempo_total += 1
+        print(acumulador)
+
+
+    else:
+
+        # enquanto tamanho do vetor for maior que zero, faca
+        while len(conteudo) > 0:
+            if (int(conteudo[0][3]) - (tempo_total - tempo_de_entrada)) == 0:
+                if acumulador != '':
+                    acumulador += "->" + conteudo[0][1]
+                else:
+                    acumulador = conteudo[0][1]
+                #deleta o processo quando ele finaliza
+                del(conteudo[0])
+                tempo_de_entrada = tempo_total
+            tempo_total += 1
+        print(acumulador)
 
 
     return 'func fifo'
@@ -71,8 +86,8 @@ def main():
     parser = argparse.ArgumentParser(description='Projeto escalonadores')
 
     # Buscando os argumentos pelo módulo argparse:
-    parser.add_argument('--nome_arquivo', "-p", type=str, help='Define o nome do arquivo a ser utilizado',
-                        required=True)
+    parser.add_argument('--nome_arquivo', "-p", type=str, help='Define o nome do arquivo a ser utilizado', default="input.txt"
+                        ) #Lembrar de tirar o default e adicionar o "required=True"    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     parser.add_argument('--sistema', "-s", type=str,
                         help='Tipo de sistema: defiene se o sistema é em lote ou interativo. Padrão: lote',
                         default='lote')
