@@ -1,5 +1,6 @@
 import argparse
-
+import os
+from fila import Conteudo
 
 # Vamos utilizar o módulo argparse para inserir as variaveis por linha de comando
 
@@ -17,8 +18,13 @@ def LerArquivo(arquivo):
 
 def fifo(conteudo, steps):
     tempo_total = 0
-    acumulador = ""
     tempo_de_entrada = 0
+    conteudo_aux = Conteudo()
+    
+    os.system("cls")
+    print('RESULTADO:')
+    print('SISTEMA EM LOTE')
+    print('ESCALONAMENTO PRIMEIRO A ENTRAR, PRIMEIRO A SAIR\n')
     # usando bubble sort para ordenar o vetor
     for i in range(len(conteudo[0])):
         for j in range(len(conteudo[0]) - 1):
@@ -28,45 +34,67 @@ def fifo(conteudo, steps):
                 conteudo[j + 1] = aux
 
     if steps:
-        # enquanto tamanho do vetor for maior que zero, faca
-        while len(conteudo) > 0:
-            if (int(conteudo[0][3]) - (tempo_total - tempo_de_entrada)) == 0:
-                if acumulador != '':
-                    acumulador += "->" + conteudo[0][1]
-                else:
-                    acumulador = conteudo[0][1]
+        while True:
+            for i in range(len(conteudo)):
+                if int(conteudo[i][2]) == tempo_total:                   
+                    print(conteudo_aux[0][1] + conteudo_aux.__repr__() + conteudo[i][1] + ' FOI CRIADO')
+                    input()
+                    conteudo_aux.inserir(conteudo[i])
+            if int(conteudo_aux[0][3]) - (tempo_total - tempo_de_entrada) == 0:
                 # deleta o processo quando ele finaliza
-                del (conteudo[0])
+                conteudo_aux.remover()
                 tempo_de_entrada = tempo_total
+            if not conteudo_aux.__bool__():
+                break
+            tempo_total += 1
+        
+    else:
+        acumulador = ''
+        while True:
+            for i in range(len(conteudo)):
+                if int(conteudo[i][2]) == tempo_total:                   
+                    if acumulador != '':
+                        acumulador += "->" + conteudo[i][1]
+                    else:
+                        acumulador = conteudo[i][1]
+                    conteudo_aux.inserir(conteudo[i])
+            if int(conteudo_aux[0][3]) - (tempo_total - tempo_de_entrada) == 0:
+                # deleta o processo quando ele finaliza
+                conteudo_aux.remover()
+                tempo_de_entrada = tempo_total
+            if not conteudo_aux.__bool__():
+                break
             tempo_total += 1
         print(acumulador)
 
 
+def sjf(conteudo, steps):
+    qtd_dados = len(conteudo)
+    tempo_total = 0
+    tempo_de_entrada = 0
+    acumulador = '0'
+    soma_retorno = 0
+    conteudo_aux = []
+    os.system("cls")  # limpar a tela
+    print('RESULTADO:')
+    print('SISTEMA EM LOTE')
+    print('ESCALONAMENTO TAREFA MAIS CURTA PRIMEIRO\n')
+
+    # usando bubble sort para ordenar o vetor pelo tempo da tarefa de modo crescente
+
+
+    print('TEMPO DE SUBMISSAO:')
+
+    print('\nTEMPO DE EXECUCAO')
+        
+    
+    
+    if steps:
+        
+           
+            
     else:
 
-        # enquanto tamanho do vetor for maior que zero, faca
-        while len(conteudo) > 0:
-            if (int(conteudo[0][3]) - (tempo_total - tempo_de_entrada)) == 0:
-                if acumulador != '':
-                    acumulador += "->" + conteudo[0][1]
-                else:
-                    acumulador = conteudo[0][1]
-                #deleta o processo quando ele finaliza
-                del(conteudo[0])
-                tempo_de_entrada = tempo_total
-            tempo_total += 1
-        print(acumulador)
-
-
-    return 'func fifo'
-
-
-def sjf():
-    return 'func sjf'
-
-
-def interativo():
-    return 'interativo'
 
 
 def rr():
@@ -86,8 +114,8 @@ def main():
     parser = argparse.ArgumentParser(description='Projeto escalonadores')
 
     # Buscando os argumentos pelo módulo argparse:
-    parser.add_argument('--nome_arquivo', "-p", type=str, help='Define o nome do arquivo a ser utilizado', default="input.txt"
-                        ) #Lembrar de tirar o default e adicionar o "required=True"    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+    parser.add_argument('--nome_arquivo', "-p", type=str, help='Define o nome do arquivo a ser utilizado', required=True
+                        )
     parser.add_argument('--sistema', "-s", type=str,
                         help='Tipo de sistema: defiene se o sistema é em lote ou interativo. Padrão: lote',
                         default='lote')
@@ -122,8 +150,8 @@ def main():
             fifo(LerArquivo(conteudo), variaveis.steps)
         elif variaveis.algoritmo == 'sjf':
             sjf(LerArquivo(conteudo), variaveis.steps)
-        elif variaveis.algoritmo == 'interativo':
-            interativo(LerArquivo(conteudo), variaveis.steps)
+        elif variaveis.algoritmo == 'rr':
+            rr(LerArquivo(conteudo), variaveis.steps)
         elif variaveis.algoritmo == 'garantido':
             garantido(LerArquivo(conteudo), variaveis.steps)
         elif variaveis.algoritmo == 'loteria':
