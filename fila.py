@@ -11,22 +11,26 @@ class Conteudo:
         for item in itens:
             self.__itens.append(item)
 
-    def remover(self) -> Any:
+    def executar(self) -> Any:
         if not self:
-            raise IndexError('Tentando remover de uma lista vazia')
+            return None
+        em_exe = self.__itens.popleft()
+        return em_exe
+    
+    def ordenar_por_job(self) -> Any:
+        self.__itens = deque(sorted(self.__itens, key = lambda processo: processo[3]))
 
-        return self.__itens.popleft()
 
     def __repr__(self) -> str:
         em_espera = ''
         if not self:
             return ''
-        for i in range(1,len(self)):
-            if i == 1:
+        for i in range(0,len(self)):
+            if i == 0:
                 em_espera += self[i][1]
             else:
                 em_espera += '->' + self[i][1]
-        return ' ' + em_espera + '  '
+        return em_espera
 
     def __bool__(self) -> bool:
         return bool(self.__itens)
