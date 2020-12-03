@@ -3,7 +3,6 @@ import os
 from fifo_sjf import Conteudo
 from rr import Conteudo_rr
 from garantido import Conteudo_garant
-# from loteria import Conteudo_loteria
 
 
 # Vamos utilizar o módulo argparse para inserir as variaveis por linha de comando
@@ -83,7 +82,6 @@ def sjf(conteudo, steps):
     print('RESULTADO:')
     print('SISTEMA EM LOTE')
     print('ESCALONAMENTO TAREFA MAIS CURTA PRIMEIRO\n')
-    print(conteudo)
     conteudo = sorted(conteudo, key=lambda processo: processo[2])
     print('TEMPO DE SUBMISSAO:')
     for i in range(len(conteudo)):
@@ -101,8 +99,6 @@ def sjf(conteudo, steps):
                 print(str(tempo_total) + ':ORDENANDO')
                 for i in range(len(conteudo)):
                     if int(conteudo[i][2]) == tempo_total:
-
-                          # Tentar refazer a logica, esta printando em linhas separadas mesmo os que entram no mesmo tempo   #
                         conteudo_aux.inserir(conteudo[i])
                         conteudo_aux.ordenar_por_job()
                 if em_execucao is not None:
@@ -192,7 +188,6 @@ def rr(conteudo, steps, quantum):
                 input()
                 tempo_de_entrada = tempo_total
             tempo_total += 1
-            # Fazer contar a partir do tempo de entrada
     else:
         while True:
             for i in range(len(conteudo)):
@@ -330,17 +325,6 @@ def garantido(conteudo, steps, quantum):
             tempo_total += 1
 
 
-# def loteria(conteudo, steps, quantum):
-#     conteudo_aux = Conteudo_loteria()
-#     sorted(conteudo, key=lambda processo: processo[2])
-#     tempo_total = 0
-#     tempo_de_entrada = 0
-#     em_execucao = ['', '', '', 0, 0]
-#     os.system("cls")  # limpar a tela
-#     print('RESULTADO:')
-#     print('SISTEMA EM LOTE')
-#     print('ESCALONAMENTO loteria\n')
-
 
 def main():
     # definindo a descrição do projeto:
@@ -395,6 +379,8 @@ def main():
             #     loteria(lerarquivo(conteudo), variaveis.steps, variaveis.tempo)
             else:
                 print('Opcao invalida para sistemas interativos')
+        else:
+            print('opcao inválida!')
 
 
     return 0
