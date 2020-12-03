@@ -1,8 +1,7 @@
 from typing import Deque, Any, Iterator
 from collections import deque
 
-
-class Conteudo:
+class Conteudo_loteria:
 
     def __init__(self, maxlen=None) -> None:
         self.__itens: Deque[Any] = deque(maxlen=maxlen)
@@ -16,20 +15,23 @@ class Conteudo:
             return None
         em_exe = self.__itens.popleft()
         return em_exe
-    
-    def ordenar_por_job(self) -> Any:
-        self.__itens = deque(sorted(self.__itens, key=lambda processo: processo[3]))
 
 
-    def __repr__(self) -> str:
+    def __repr__(self,tempo_total) -> str:
         em_espera = ''
         if not self:
-            return ''
-        for i in range(0,len(self)):
+            return '-'
+        for i in range(0, len(self)):
             if i == 0:
-                em_espera += self[i][1]
+                if tempo_total != 0:
+                    em_espera += '(' + self[i][1] + ',' + str(round((self[i][4]/tempo_total),2))+ ')'
+                else:
+                    em_espera += '(' + self[i][1] + ',' + str(0)+ ')'
             else:
-                em_espera += '->' + self[i][1]
+                if tempo_total != 0:
+                    em_espera += ';' + '(' + self[i][1] + ',' + str(round(self[i][4]/tempo_total,2)) + ')'
+                else:
+                    em_espera += ';' + '(' +  self[i][1] + ',' + str(0) + ')'
         return em_espera
 
     def __bool__(self) -> bool:
@@ -43,5 +45,5 @@ class Conteudo:
 
     def __getitem__(self, index: int) -> Any:
         if not self:
-            return ['','']
+            return ['', '']
         return self.__itens[index]
